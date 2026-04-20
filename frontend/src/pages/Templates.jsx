@@ -4,12 +4,11 @@ import { AI_API_BASE } from '../api/paths'
 import Sidebar from '../components/Sidebar'
 import MobileTopBar from '../components/MobileTopBar'
 import ParticleBackground from '../components/ParticleBackground'
-import { LayoutTemplate, Eye, Wand2, Check, X, Loader2, User, Briefcase, Code2, Clock } from 'lucide-react'
+import { LayoutTemplate, Eye, Wand2, Check, X, Loader2, User, Briefcase, Code2, Clock, Sparkles } from 'lucide-react'
 
 import TemplatePurple      from '../templates/TemplatePurple'
 import TemplateFuturistic  from '../templates/TemplateFuturistic'
 import TemplateMinimalist  from '../templates/TemplateMinimalist'
-import TemplateGrayscale   from '../templates/TemplateGrayscale'
 import TemplateBrownCream  from '../templates/TemplateBrownCream'
 import TemplateDarkBlue   from '../templates/TemplateDarkBlue'
 import TemplatePresentationStyle from '../templates/TemplatePresentationStyle'
@@ -21,10 +20,11 @@ import TemplateNeon from '../templates/TemplateNeon'
 import TemplateLight from '../templates/TemplateLight'
 import TemplateDark from '../templates/TemplateDark'
 import TemplateClassic from '../templates/TemplateClassic'
+import TemplateSoumya from '../templates/TemplateSoumya'
+import TemplateDeveloper from '../templates/TemplateDeveloper'
 
 const TEMPLATE_COMPONENTS = {
   browncream: TemplateBrownCream,
-  grayscale: TemplateGrayscale,
   purple: TemplatePurple,
   futuristic: TemplateFuturistic,
   minimalist: TemplateMinimalist,
@@ -37,7 +37,9 @@ const TEMPLATE_COMPONENTS = {
   neon: TemplateNeon,
   light: TemplateLight,
   dark: TemplateDark,
-  classic: TemplateClassic
+  classic: TemplateClassic,
+  soumya: TemplateSoumya,
+  developer: TemplateDeveloper
 }
 
 const DEMO_PORTFOLIO = {
@@ -49,6 +51,36 @@ const DEMO_PORTFOLIO = {
 }
 
 const templates = [
+  {
+    id: 'soumya',
+    name: 'Soumya Creative',
+    description: 'Premium dark purple aesthetic with floating animations, timeline experience, and icon-based skills grid. Perfect for tech enthusiasts.',
+    accent: '#c770f0',
+    accentRgb: '199,112,240',
+    bg: 'linear-gradient(135deg,#0c0513 0%,#1a0b2e 100%)',
+    tag: 'Premium',
+    tagColor: '#c770f0',
+    preview: [
+      { type: 'header', color: '#c770f0' },
+      { type: 'skills' },
+      { type: 'experience' },
+    ],
+  },
+  {
+    id: 'developer',
+    name: 'Developer Folio',
+    description: 'Clean dark theme with SVG illustrations, timeline education, and hover-effect skill cards. Inspired by the popular developer-folio layout.',
+    accent: '#6c63ff',
+    accentRgb: '108,99,255',
+    bg: 'linear-gradient(135deg,#171c28 0%,#1e2a4a 100%)',
+    tag: 'Premium',
+    tagColor: '#6c63ff',
+    preview: [
+      { type: 'header', color: '#6c63ff' },
+      { type: 'skills' },
+      { type: 'experience' },
+    ],
+  },
   {
     id: 'darkblue',
     name: 'Dark Blue Creative',
@@ -75,21 +107,6 @@ const templates = [
     tagColor: '#7B5B3A',
     preview: [
       { type: 'header', color: '#7B5B3A' },
-      { type: 'skills' },
-      { type: 'experience' },
-    ],
-  },
-  {
-    id: 'grayscale',
-    name: 'B&W Photography',
-    description: 'Dark charcoal multi-section layout inspired by professional photography portfolios. Bold typography, full-screen sections, and a timeless black & white aesthetic.',
-    accent: '#ffffff',
-    accentRgb: '255,255,255',
-    bg: 'linear-gradient(135deg,#2d2d2d 0%,#1e1e1e 100%)',
-    tag: 'New',
-    tagColor: '#ffffff',
-    preview: [
-      { type: 'header', color: '#ffffff' },
       { type: 'skills' },
       { type: 'experience' },
     ],

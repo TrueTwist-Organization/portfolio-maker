@@ -145,42 +145,31 @@ export default function TemplateBlueGradientAesthetic({ p = {} }) {
     ? skills.slice(0, 3).map(s => s.name)
     : experience.length
     ? experience.slice(0, 3).map(e => e.role)
-    : ['Creative Design', 'Brand Strategy', 'Visual Storytelling']
+    : []
 
   /* Build portfolio list from projects */
-  const portList = projects.length ? projects.slice(0, 4) : [
-    { name: 'Portfolio 01' },
-    { name: 'Portfolio 02' },
-    { name: 'Portfolio 03' },
-    { name: 'Portfolio 04' },
-  ]
+  const portList = projects.length ? projects.slice(0, 4) : []
 
   /* Build vision points */
   const visionPoints = skills.length >= 4
     ? skills.slice(0, 4).map(s => s.name + (s.level ? ` — ${s.level}` : ''))
-    : [
-        'To create meaningful design experiences that connect brands with their audiences.',
-        'To push creative boundaries while maintaining clarity and purpose in every project.',
-        'To deliver work that stands the test of time and resonates across cultures.',
-        'To continuously evolve and adapt to the ever-changing creative landscape.',
-      ]
+    : skills.length > 0 
+    ? skills.map(s => s.name + (s.level ? ` — ${s.level}` : ''))
+    : []
 
   /* Build mission points */
   const missionPoints = experience.length >= 2
     ? experience.slice(0, 2).map(e => `${e.role} at ${e.company}${e.description ? ': ' + e.description.slice(0, 80) + '…' : ''}`)
-    : [
-        'To deliver work that exceeds expectations and creates lasting impact for every client and project undertaken.',
-        'To foster creativity, collaboration, and innovation in everything I do, building solutions that matter.',
-      ]
+    : experience.length > 0
+    ? experience.map(e => `${e.role} at ${e.company}${e.description ? ': ' + e.description.slice(0, 80) + '…' : ''}`)
+    : []
 
-  /* Build team list */
+  /* Build team list - Use experience as fallback if team is not explicitly provided */
   const teamList = experience.length >= 3
     ? experience.slice(0, 3).map(e => ({ name: e.role, desc: e.company }))
-    : [
-        { name: 'Team Member 01', desc: 'Creative Director & Lead Designer' },
-        { name: 'Team Member 02', desc: 'Brand Strategist & Visual Artist' },
-        { name: 'Team Member 03', desc: 'Motion Designer & Illustrator' },
-      ]
+    : experience.length > 0
+    ? experience.map(e => ({ name: e.role, desc: e.company }))
+    : []
 
   /* Bio split into 2 paragraphs */
   const sentences = bio.split(/(?<=[.!?])\s+/)

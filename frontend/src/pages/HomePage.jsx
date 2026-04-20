@@ -1,14 +1,33 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  Sparkles, Upload, PenLine, Zap, Star, Shield,
-  ArrowRight, Code2, Palette, Globe, ChevronRight, Play,
-  Twitter, Linkedin, Github, ExternalLink
+import { 
+  Plus, ChevronRight, Zap, Palette, Globe, Shield, Code2, Star, Sparkles, ArrowRight,
+  Flame, LineChart, FileDown, Globe2, Languages, Lock,
+  Twitter, Linkedin, Github
 } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
 import MobileTopBar from '../components/MobileTopBar'
 import ParticleBackground from '../components/ParticleBackground'
 import FloatingIconsBackground from '../components/FloatingIconsBackground'
+import TemplateBrownCream from '../templates/TemplateBrownCream'
+import TemplateFuturistic from '../templates/TemplateFuturistic'
+import TemplatePurple from '../templates/TemplatePurple'
+import TemplateDark from '../templates/TemplateDark'
+
+const TEMPLATE_COMPONENTS = {
+  browncream: TemplateBrownCream,
+  futuristic: TemplateFuturistic,
+  purple: TemplatePurple,
+  dark: TemplateDark
+}
+
+const DEMO_PORTFOLIO = {
+  details: { name: 'Your Name', title: 'Professional Role', bio: 'This is how your bio will look. Fresh, clean and impactful.' },
+  skills: [{ name: 'React', level: 'Expert' }, { name: 'Design', level: 'Expert' }],
+  education: [{ degree: 'B.Sc.', field: 'Computer Science', institution: 'University', from: '2020', to: '2024' }],
+  experience: [{ role: 'Creative Director', company: 'Studio X', from: '2024', to: 'Present' }],
+  projects: [{ name: 'Project Alpha', description: 'Interactive web experience.' }]
+}
 
 /* ── 3D Tilt Card ── */
 function TiltCard({ children, className = '', style = {}, onClick }) {
@@ -103,22 +122,26 @@ function StepCard({ num, title, desc, active }) {
 }
 
 /* ── Template Card ── */
-function TemplateCard({ name, tag, image, accent = '#22d3ee', onClick }) {
+function TemplateCard({ id, name, tag, accent = '#22d3ee', onClick }) {
+  const Comp = TEMPLATE_COMPONENTS[id]
   return (
     <TiltCard onClick={onClick} className="rounded-2xl overflow-hidden cursor-pointer group relative shadow-2xl transition-all duration-300 hover:scale-[1.02]" style={{ border: `1px solid ${accent}20` }}>
       <div className="h-56 relative overflow-hidden bg-[#0a0f1d]">
-        {/* Mockup Figure */}
+        {/* Live Preview Component */}
         <div 
-          className="absolute inset-0 z-0 bg-cover bg-center transition-all duration-[1s] group-hover:scale-110 group-hover:rotate-1"
-          style={{ backgroundImage: `url(${image})` }}
-        />
+          className="absolute inset-0 z-0 origin-top-left pointer-events-none transition-all duration-700 group-hover:scale-[0.32]"
+          style={{ width: '333%', height: '333%', transform: 'scale(0.3)' }}
+        >
+          {Comp ? <Comp p={{ ...DEMO_PORTFOLIO, template: id }} /> : <div className="w-full h-full bg-slate-900" />}
+        </div>
+        
         <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#0a0f1d] via-transparent to-transparent opacity-60" />
         
         {/* Accent bar at bottom */}
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 4, background: `linear-gradient(90deg,${accent},${accent}44)`, zIndex: 10 }} />
         
         {/* Hover overlay */}
-        <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-all duration-400 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
+        <div className="absolute inset-0 z-20 opacity-0 group-hover:opacity-100 transition-all duration-400 flex items-center justify-center bg-black/40 backdrop-blur-[1px]">
           <span className="text-white font-black text-[10px] uppercase tracking-[0.2em] px-5 py-2.5 rounded-xl border border-white/20" 
             style={{ background: `${accent}CC`, boxShadow: `0 8px 24px ${accent}40` }}>
             Live Preview
@@ -501,19 +524,19 @@ function HeroPhoneShowcase() {
    DATA
    ══════════════════════════════════════════ */
 const features = [
-  { icon: Zap,    title: 'AI Content Generation', desc: 'Our AI suggests professional bio and project descriptions based on your skills and experience.', gradient: 'linear-gradient(135deg,#22d3ee,#0ea5e9)', glow: 'rgba(34,211,238,0.3)', bgImage: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800' },
-  { icon: Palette, title: 'Stunning Templates',  desc: 'Choose from 15+ professionally designed templates that make you stand out.', gradient: 'linear-gradient(135deg,#6366f1,#8b5cf6)', glow: 'rgba(99,102,241,0.3)', bgImage: 'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800' },
-  { icon: Globe,  title: 'Instant Deployment',   desc: 'Publish your portfolio with one click and share it anywhere with a custom link.', gradient: 'linear-gradient(135deg,#14b8a6,#22d3ee)', glow: 'rgba(20,184,166,0.3)', bgImage: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800' },
-  { icon: Shield, title: 'Always Up-to-Date',    desc: 'Edit your portfolio anytime. Changes go live instantly without any re-deployment.', gradient: 'linear-gradient(135deg,#f59e0b,#ef4444)', glow: 'rgba(245,158,11,0.3)', bgImage: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800' },
-  { icon: Code2,  title: 'No Coding Needed',     desc: 'Built for everyone. Zero technical skills required to create a pro portfolio.', gradient: 'linear-gradient(135deg,#ec4899,#8b5cf6)', glow: 'rgba(236,72,153,0.3)', bgImage: 'https://images.unsplash.com/photo-1618477388954-7852f32655ec?auto=format&fit=crop&q=80&w=800' },
-  { icon: Star,   title: 'SEO Optimized',        desc: 'Your portfolio ranks on Google. Built-in SEO so recruiters can find you easily.', gradient: 'linear-gradient(135deg,#22d3ee,#6366f1)', glow: 'rgba(34,211,238,0.3)', bgImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800' },
+  { icon: Flame,    title: 'AI Career Roast', desc: 'Get a professional roast of your existing profile with AI-driven fixes for maximum impact.', gradient: 'linear-gradient(135deg,#ff4D4D,#f97316)', glow: 'rgba(249,115,22,0.3)', bgImage: '/images/feat_career_roast.jpg' },
+  { icon: LineChart, title: 'Visitor Intelligence', desc: 'Real-time heatmaps and recruiter tracking to see exactly who is viewing your work globally.', gradient: 'linear-gradient(135deg,#6366f1,#8b5cf6)', glow: 'rgba(99,102,241,0.3)', bgImage: '/images/feat_visitor.jpg' },
+  { icon: FileDown,  title: 'One-Click PDF Pro', desc: 'Convert your digital portfolio into ATS-optimized, high-conversion PDF resumes instantly.', gradient: 'linear-gradient(135deg,#10b981,#3b82f6)', glow: 'rgba(16,185,129,0.3)', bgImage: '/images/feat_pdf.png' },
+  { icon: Globe2,   title: 'Custom Domain Studio', desc: 'Connect your own professional domain with free enterprise-grade SSL and global CDN.', gradient: 'linear-gradient(135deg,#22d3ee,#0ea5e9)', glow: 'rgba(34,211,238,0.3)', bgImage: '/images/feat_domain.png' },
+  { icon: Languages, title: 'Global Multi-Language', desc: 'Instantly localize your portfolio in 50+ languages with AI-powered cultural translation.', gradient: 'linear-gradient(135deg,#ec4899,#8b5cf6)', glow: 'rgba(236,72,153,0.3)', bgImage: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800' },
+  { icon: Lock,     title: 'Military-Grade Privacy', desc: 'Protect sensitive projects and client work with encrypted, password-protected private walls.', gradient: 'linear-gradient(135deg,#f59e0b,#ef4444)', glow: 'rgba(245,158,11,0.3)', bgImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800' },
 ]
 
 const templates = [
-  { name: 'Brown & Cream',     tag: 'Classic',  accent: '#7B5B3A', image: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&q=80&w=800' },
-  { name: 'Neural Circuit',    tag: 'Exclusive',accent: '#00d4ff', image: 'https://images.unsplash.com/photo-1614850553906-8d14a51f4968?auto=format&fit=crop&q=80&w=800' },
-  { name: 'Creative Gradient', tag: 'Popular',  accent: '#c4a0d0', image: 'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=800' },
-  { name: 'Dark Minimal',      tag: 'Impact',   accent: '#F0EEE8', image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800' },
+  { id: 'browncream',  name: 'Brown & Cream',     tag: 'Classic',  accent: '#7B5B3A' },
+  { id: 'futuristic',  name: 'Neural Circuit',    tag: 'Exclusive',accent: '#00d4ff' },
+  { id: 'purple',      name: 'Creative Gradient', tag: 'Popular',  accent: '#c4a0d0' },
+  { id: 'dark',        name: 'Dark Minimal',      tag: 'Impact',   accent: '#6366f1' },
 ]
 
 const TEMPLATE_DURATIONS = ['4.2s', '5.1s', '3.8s', '4.7s']
@@ -660,17 +683,40 @@ export default function HomePage() {
         </section>
 
         {/* ══════════════ FEATURES SECTION ══════════════ */}
-        <section className="px-3 sm:px-12 py-10 sm:py-12">
-          <div className="text-center mb-10 sm:mb-14 px-2">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-4"
+        <section className="relative px-3 sm:px-12 py-16 sm:py-24 mt-10">
+          {/* Stunning Layered Background for Section */}
+          <div className="absolute inset-0 z-0 opacity-[0.15] overflow-hidden">
+            <div 
+              className="absolute inset-0 transition-transform duration-[10s] ease-linear scale-110"
+              style={{
+                backgroundImage: 'url("/images/cta_bg.png")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                filter: 'blur(8px) contrast(1.2) sepia(0.3) hue-rotate(180deg)'
+              }}
+            />
+          </div>
+          
+          <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#060d1a] via-transparent to-[#060d1a]" />
+          
+          <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#060d1a] to-transparent z-[2]" />
+          <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-[#060d1a] to-transparent z-[2]" />
+
+          <div className="absolute top-1/2 left-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-[100px] z-[1] -translate-y-1/2 -translate-x-1/2" />
+          <div className="absolute top-1/2 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-[100px] z-[1] -translate-y-1/2 translate-x-1/2" />
+
+          <div className="relative z-10 text-center mb-12 sm:mb-16 px-2">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-4 shadow-[0_0_20px_rgba(34,211,238,0.15)]"
               style={{ background: 'rgba(34,211,238,0.08)', border: '1px solid rgba(34,211,238,0.2)' }}>
               <Zap size={13} className="text-cyan-400" />
               <span className="text-cyan-400 text-xs font-semibold uppercase tracking-wider">Powerful Features</span>
             </div>
-            <h2 className="text-white text-2xl sm:text-4xl font-black mb-3">Everything You Need</h2>
-            <p className="text-gray-400 max-w-lg mx-auto">Tools designed to make your portfolio stand out</p>
+            <h2 className="text-white text-3xl sm:text-5xl font-black mb-4 italic tracking-tight drop-shadow-xl">
+              Elevate Your <span className="text-cyan-400" style={{ textShadow: '0 0 30px rgba(34,211,238,0.4)' }}>Career</span>
+            </h2>
+            <p className="text-gray-400 max-w-lg mx-auto text-lg">Elite tools designed for professionals who demand the absolute best.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-2 lg:px-8">
             {features.map((f, i) => <FeatureCard key={i} {...f} />)}
           </div>
         </section>

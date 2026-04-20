@@ -34,7 +34,6 @@ import api from '../api/api'
 import TemplatePurple      from '../templates/TemplatePurple'
 import TemplateFuturistic  from '../templates/TemplateFuturistic'
 import TemplateMinimalist  from '../templates/TemplateMinimalist'
-import TemplateGrayscale   from '../templates/TemplateGrayscale'
 import TemplateBrownCream  from '../templates/TemplateBrownCream'
 import TemplateDarkBlue   from '../templates/TemplateDarkBlue'
 import TemplatePresentationStyle from '../templates/TemplatePresentationStyle'
@@ -46,11 +45,12 @@ import TemplateNeon from '../templates/TemplateNeon'
 import TemplateLight from '../templates/TemplateLight'
 import TemplateDark from '../templates/TemplateDark'
 import TemplateClassic from '../templates/TemplateClassic'
+import TemplateSoumya from '../templates/TemplateSoumya'
+import TemplateDeveloper from '../templates/TemplateDeveloper'
 import TemplateAlexa from '../templates/TemplateAlexa'
 
 const TEMPLATE_MAP = {
   browncream:         { component: TemplateBrownCream,         name: 'Brown & Cream',       accent: '#7B5B3A' },
-  grayscale:          { component: TemplateGrayscale,          name: 'B&W Photography',     accent: '#ffffff' },
   purple:             { component: TemplatePurple,             name: 'Purple Beige',        accent: '#c4a0d0' },
   futuristic:         { component: TemplateFuturistic,         name: 'Neural Circuit',      accent: '#00d4ff' },
   minimalist:         { component: TemplateMinimalist,         name: 'B&W Minimalist',      accent: '#e8e3d5' },
@@ -65,6 +65,8 @@ const TEMPLATE_MAP = {
   dark:                  { component: TemplateDark,                    name: 'Modern Dark',                 accent: '#6366f1' },
   classic:               { component: TemplateClassic,                 name: 'Classic Professional',        accent: '#2d3748' },
   alexa:                 { component: TemplateAlexa,                   name: 'Alexa Modern',                accent: '#6e57e0' },
+  soumya:                { component: TemplateSoumya,                  name: 'Soumya Creative',             accent: '#c770f0' },
+  developer:             { component: TemplateDeveloper,               name: 'Developer Portfolio',         accent: '#6c63ff' },
 }
 
 function generatePurpleHTML(portfolio) {

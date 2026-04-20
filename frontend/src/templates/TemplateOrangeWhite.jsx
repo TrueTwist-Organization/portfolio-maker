@@ -304,10 +304,10 @@ export default function TemplateOrangeWhite({ p = {} }) {
           {/* Left: Education entries */}
           <div style={{ flex: 1, maxWidth: 480 }}>
             <Heading>Education</Heading>
-            {education.length > 0 ? education.map((edu, i) => (
+            {education.map((edu, i) => (
               <div key={i} style={{ marginBottom: 32 }}>
                 <div style={{ fontSize: 16, fontWeight: 800, color: BLACK, marginBottom: 2 }}>
-                  {edu.from && edu.to ? `${edu.from}–${edu.to}` : ''}
+                  {edu.from && edu.to ? `${edu.from}–${edu.to}` : (edu.from || edu.to || '')}
                 </div>
                 <div style={{ fontSize: 18, fontWeight: 700, color: BLACK, marginBottom: 6 }}>
                   {edu.institution}
@@ -316,20 +316,7 @@ export default function TemplateOrangeWhite({ p = {} }) {
                   {edu.degree}{edu.field ? ` in ${edu.field}` : ''}{edu.grade ? ` — ${edu.grade}` : ''}
                 </p>
               </div>
-            )) : (
-              <>
-                <div style={{ marginBottom: 32 }}>
-                  <div style={{ fontSize: 16, fontWeight: 800, color: BLACK, marginBottom: 2 }}>2010–2014</div>
-                  <div style={{ fontSize: 18, fontWeight: 700, color: BLACK, marginBottom: 6 }}>Rimberio University</div>
-                  <p style={{ fontSize: 14, color: GRAY, lineHeight: 1.7 }}>Bachelor of Arts in Interior Design. Graduated with distinction.</p>
-                </div>
-                <div>
-                  <div style={{ fontSize: 16, fontWeight: 800, color: BLACK, marginBottom: 2 }}>2014–2018</div>
-                  <div style={{ fontSize: 18, fontWeight: 700, color: BLACK, marginBottom: 6 }}>Borcelle University</div>
-                  <p style={{ fontSize: 14, color: GRAY, lineHeight: 1.7 }}>Master's in Space & Interior Architecture. Thesis on biophilic design principles.</p>
-                </div>
-              </>
-            )}
+            ))}
           </div>
 
           {/* Right: decorative image boxes */}
@@ -361,31 +348,17 @@ export default function TemplateOrangeWhite({ p = {} }) {
           {/* Left: Experience */}
           <div style={{ flex: 1, maxWidth: 480 }}>
             <Heading>Experience</Heading>
-            {experience.length > 0 ? experience.map((exp, i) => (
+            {experience.map((exp, i) => (
               <div key={i} style={{ marginBottom: 32 }}>
                 <div style={{ fontSize: 20, fontWeight: 600, color: BLACK, marginBottom: 4 }}>
                   {exp.company}
                 </div>
                 <p style={{ fontSize: 14, color: GRAY, lineHeight: 1.8, fontStyle: 'italic' }}>
+                  {exp.role && <><b style={{ color: BLACK }}>{exp.role}</b><br/></>}
                   {exp.description}
                 </p>
               </div>
-            )) : (
-              <>
-                <div style={{ marginBottom: 32 }}>
-                  <div style={{ fontSize: 20, fontWeight: 600, color: BLACK, marginBottom: 4 }}>Ginyard International Co.</div>
-                  <p style={{ fontSize: 14, color: GRAY, lineHeight: 1.8, fontStyle: 'italic' }}>
-                    Led end-to-end interior design projects for commercial and residential clients. Managed teams and ensured design quality from concept to completion.
-                  </p>
-                </div>
-                <div>
-                  <div style={{ fontSize: 20, fontWeight: 600, color: BLACK, marginBottom: 4 }}>Giggling Platypus Co.</div>
-                  <p style={{ fontSize: 14, color: GRAY, lineHeight: 1.8, fontStyle: 'italic' }}>
-                    Developed and presented interior design proposals, coordinated with contractors, and ensured brand alignment across all spaces.
-                  </p>
-                </div>
-              </>
-            )}
+            ))}
           </div>
 
           {/* Right: photo grid */}
@@ -422,225 +395,42 @@ export default function TemplateOrangeWhite({ p = {} }) {
         />
       </Section>
 
-      {/* ══ 5. PROJECT 1 ══ */}
-      <Section active={4} total={totalSections}>
-        {/* Salmon arc top-right */}
-        <ArcCurve
-          d="M 0 60 Q 100 -20 200 60"
-          width={220} height={100}
-          style={{ top: -10, right: 40 }}
-          stroke={SALMON} strokeWidth={50}
-        />
-
-        <div style={{ position: 'relative', zIndex: 2 }}>
-          <h2 style={{
-            fontSize: 56, fontWeight: 900, color: BLACK,
-            margin: '0 0 28px', lineHeight: 1,
-          }}>
-            {projects[0]?.name || 'Project 1'}
-          </h2>
-          <div style={{ display: 'flex', gap: 16 }}>
-            {/* Two tall image boxes */}
-            <div style={{
-              flex: 1.2, height: 280,
-              background: `linear-gradient(160deg, #d4c5b8, ${SALMON})`,
-              borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 13, color: GRAY, fontStyle: 'italic', overflow: 'hidden',
+      {/* ══ DYNAMIC PROJECTS ══ */}
+      {projects.map((proj, idx) => (
+        <Section key={idx} active={4 + idx} total={totalSections}>
+          {/* Salmon arc top-right */}
+          <ArcCurve
+            d="M 0 60 Q 100 -20 200 60"
+            width={220} height={100}
+            style={{ top: -10, right: 40 }}
+            stroke={SALMON} strokeWidth={50}
+          />
+          <div style={{ position: 'relative', zIndex: 2 }}>
+            <h2 style={{
+              fontSize: 56, fontWeight: 900, color: BLACK,
+              margin: '0 0 28px', lineHeight: 1,
             }}>
-              {projects[0]?.image ? <img src={projects[0].image} alt={projects[0]?.name} style={{ width:'100%', height:'100%', objectFit:'cover' }} /> : 'Project Image 1'}
-            </div>
-            <div style={{
-              flex: 1, height: 280,
-              background: `linear-gradient(160deg, ${SALMON}, #c4b5a8)`,
-              borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 13, color: GRAY, fontStyle: 'italic',
-            }}>
-              Project Image 2
-            </div>
-            {/* Right: one image + description */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {proj.name}
+            </h2>
+            <div style={{ display: 'flex', gap: 16 }}>
               <div style={{
-                flex: 1, background: `linear-gradient(160deg, #e0d0c4, ${SALMON}80)`,
+                flex: 1.2, height: 280,
+                background: `linear-gradient(160deg, #d4c5b8, ${SALMON})`,
                 borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 13, color: GRAY, fontStyle: 'italic',
+                fontSize: 13, color: GRAY, fontStyle: 'italic', overflow: 'hidden',
               }}>
-                Project Image 3
+                {proj.image ? <img src={proj.image} alt={proj.name} style={{ width:'100%', height:'100%', objectFit:'cover' }} /> : 'Project Image'}
               </div>
-              <p style={{ fontSize: 13, color: GRAY, lineHeight: 1.7 }}>
-                {projects[0]?.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eleifend tellus et iaculis iaculis.'}
-              </p>
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* ══ 6. PROJECT 2 ══ */}
-      <Section active={5} total={totalSections}>
-        {/* Salmon blob top-right */}
-        <ArcCurve
-          d="M 0 50 Q 100 -10 200 50"
-          width={220} height={90}
-          style={{ top: -10, right: 60 }}
-          stroke={SALMON} strokeWidth={50}
-        />
-
-        <div style={{ display: 'flex', gap: 32, alignItems: 'center', position: 'relative', zIndex: 2 }}>
-          <div style={{ flex: 0.8 }}>
-            <h2 style={{
-              fontSize: 56, fontWeight: 900, color: BLACK,
-              margin: '0 0 20px', lineHeight: 1,
-            }}>
-              {projects[1]?.name || 'Project 2'}
-            </h2>
-          </div>
-          <div style={{ flex: 1 }}>
-            <div style={{
-              height: 180,
-              background: `linear-gradient(135deg, #f0e8e0, ${SALMON})`,
-              borderRadius: 24, marginBottom: 16,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 13, color: GRAY, fontStyle: 'italic',
-            }}>
-              Project Image 1 (rounded)
-            </div>
-          </div>
-        </div>
-        <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start', position: 'relative', zIndex: 2, marginTop: 8 }}>
-          <div style={{ flex: 1 }}>
-            <div style={{
-              height: 180,
-              background: `linear-gradient(135deg, ${SALMON}, #d8c8bc)`,
-              borderRadius: 24,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 13, color: GRAY, fontStyle: 'italic',
-            }}>
-              Project Image 2 (rounded)
-            </div>
-          </div>
-          <div style={{ flex: 0.8, display: 'flex', alignItems: 'center' }}>
-            <p style={{ fontSize: 14, color: GRAY, lineHeight: 1.8, textAlign: 'right' }}>
-              {projects[1]?.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eleifend tellus et iaculis iaculis. Cras ac nisl id est scelerisque pretium vel et dui.'}
-            </p>
-          </div>
-        </div>
-      </Section>
-
-      {/* ══ 7. PROJECT 3 ══ */}
-      <Section active={6} total={totalSections}>
-        {/* Salmon arc top-right */}
-        <ArcCurve
-          d="M 0 50 Q 100 -10 200 50"
-          width={220} height={90}
-          style={{ top: -10, right: 60 }}
-          stroke={SALMON} strokeWidth={50}
-        />
-
-        <div style={{ position: 'relative', zIndex: 2 }}>
-          <h2 style={{
-            fontSize: 56, fontWeight: 900, color: BLACK,
-            margin: '0 0 16px', lineHeight: 1,
-          }}>
-            {projects[2]?.name || 'Project 3'}
-          </h2>
-          <p style={{ fontSize: 15, color: GRAY, lineHeight: 1.8, maxWidth: 700, marginBottom: 24 }}>
-            {projects[2]?.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eleifend tellus et iaculis iaculis. Cras ac nisl id est scelerisque pretium vel et dui.'}
-          </p>
-          <div style={{ display: 'flex', gap: 12 }}>
-            {[1, 2, 3].map(n => (
-              <div key={n} style={{
-                flex: 1, height: 220,
-                background: `linear-gradient(160deg, ${n % 2 === 0 ? SALMON : '#d4c0b0'}, #c8b4a4)`,
-                borderRadius: 8,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 13, color: GRAY, fontStyle: 'italic',
-              }}>
-                Image {n}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <p style={{ fontSize: 15, color: BLACK, opacity: 0.8, lineHeight: 1.8 }}>
+                  {proj.description}
+                </p>
+                {proj.tech && <div style={{ fontSize: 13, color: ORANGE, fontWeight: 700 }}>{proj.tech}</div>}
               </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* ══ 8. PROJECT GALLERY ══ */}
-      <Section active={7} total={totalSections} minHeight={520}>
-        <div style={{ display: 'flex', gap: 12, height: 440, position: 'relative', zIndex: 2 }}>
-          {/* Left 2x2 grid */}
-          <div style={{ flex: 1.3, display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 12 }}>
-            {['#d8c8b8', '#e0d0c0', SALMON, '#ccc0b0'].map((c, i) => (
-              <div key={i} style={{
-                background: `linear-gradient(135deg, ${c}, ${SALMON}80)`,
-                borderRadius: 16,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 13, color: GRAY, fontStyle: 'italic', border: `2px solid ${ORANGE}30`,
-              }}>
-                Gallery {i + 1}
-              </div>
-            ))}
-          </div>
-          {/* Right tall image */}
-          <div style={{
-            flex: 0.6,
-            background: `linear-gradient(160deg, ${SALMON}, #b8a898)`,
-            borderRadius: 8,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 13, color: GRAY, fontStyle: 'italic',
-          }}>
-            Featured Gallery Image
-          </div>
-        </div>
-      </Section>
-
-      {/* ══ 9. PROJECT 4 ══ */}
-      <Section active={8} total={totalSections}>
-        {/* Three dots top-right */}
-        <ThreeDots style={{ position: 'absolute', top: 28, right: 36, zIndex: 2 }} />
-        {/* Salmon arc top-right */}
-        <ArcCurve
-          d="M 0 50 Q 90 -5 180 50"
-          width={200} height={90}
-          style={{ top: 40, right: 140 }}
-          stroke={SALMON} strokeWidth={40}
-        />
-        {/* Salmon arc bottom-right */}
-        <ArcCurve
-          d="M 0 0 Q 120 80 0 180"
-          width={140} height={200}
-          style={{ bottom: 30, right: 0 }}
-          stroke={SALMON} strokeWidth={40}
-        />
-
-        <div style={{ display: 'flex', gap: 32, alignItems: 'flex-start', position: 'relative', zIndex: 2 }}>
-          {/* Left: large project image */}
-          <div style={{ flex: 1 }}>
-            <h2 style={{
-              fontSize: 56, fontWeight: 900, color: BLACK,
-              margin: '0 0 20px', lineHeight: 1,
-            }}>
-              {projects[3]?.name || 'Project 4'}
-            </h2>
-            <div style={{
-              height: 320,
-              background: `linear-gradient(160deg, #d4c0b0, ${SALMON})`,
-              borderRadius: 8,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 13, color: GRAY, fontStyle: 'italic',
-            }}>
-              Project 4 Image
             </div>
           </div>
-          {/* Right: description blocks */}
-          <div style={{ flex: 0.7, paddingTop: 72 }}>
-            <p style={{ fontSize: 14, color: GRAY, lineHeight: 1.8, marginBottom: 24 }}>
-              {projects[3]?.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eleifend tellus et iaculis iaculis. Cras ac nisl id est scelerisque pretium vel et dui.'}
-            </p>
-            {projects[3]?.tech && (
-              <p style={{ fontSize: 14, color: GRAY, lineHeight: 1.8 }}>
-                Tech: {projects[3].tech}
-              </p>
-            )}
-          </div>
-        </div>
-      </Section>
+        </Section>
+      ))}
 
       {/* ══ 10. SKILLS (if any) ══ */}
       {skills.length > 0 && (

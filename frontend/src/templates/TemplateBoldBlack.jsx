@@ -140,23 +140,14 @@ export default function TemplateBoldBlack({ p = {} }) {
   const year      = new Date().getFullYear()
 
   /* skill categories for "experience" slide */
-  const expAreas = skills.length >= 4
+  const expAreas = skills.length >= 4 
     ? skills.slice(0, 4).map(s => ({ title: s.name, desc: `${s.level} level expertise` }))
-    : [
-        { title: 'Social Media Marketing Content', desc: 'Strategy and execution across all major social platforms to grow brand presence and engagement.' },
-        { title: 'Search Engine Optimization', desc: 'On-page, off-page and technical SEO to drive organic traffic and improve search rankings.' },
-        { title: 'Organize Product Promotions', desc: 'Full-cycle campaign management from planning through post-campaign performance analysis.' },
-        { title: 'Email Marketing', desc: 'Segmented email flows and automation sequences that convert leads into loyal customers.' },
-      ]
+    : skills.map(s => ({ title: s.name, desc: `${s.level} level expertise` }))
 
   /* strategy bullet points from experience or defaults */
   const strategyPoints = experience.length
     ? experience.slice(0, 3).map(e => ({ title: e.role, desc: e.description || `${e.company}${e.location ? ` · ${e.location}` : ''}` }))
-    : [
-        { title: 'Goals & Targets', desc: 'Setting clear KPIs and measurable milestones aligned with business growth objectives.' },
-        { title: 'Analytics & Reports', desc: 'Data-driven insights using advanced analytics tools to measure and optimise performance.' },
-        { title: 'Adaptation & Evolution', desc: 'Continuously refining strategies based on real-time data and market feedback.' },
-      ]
+    : []
 
   return (
     <div

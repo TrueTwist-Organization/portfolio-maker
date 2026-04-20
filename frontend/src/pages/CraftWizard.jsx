@@ -11,6 +11,35 @@ import Sidebar from '../components/Sidebar'
 import ParticleBackground from '../components/ParticleBackground'
 import api from '../api/api'
 
+// Import templates for live preview in the selector
+import TemplateAlexa from '../templates/TemplateAlexa'
+import TemplateBrownCream from '../templates/TemplateBrownCream'
+import TemplatePurple from '../templates/TemplatePurple'
+import TemplateFuturistic from '../templates/TemplateFuturistic'
+import TemplateDark from '../templates/TemplateDark'
+import TemplateClassic from '../templates/TemplateClassic'
+import TemplateMinimalist from '../templates/TemplateMinimalist'
+import TemplateSoumya from '../templates/TemplateSoumya'
+import TemplateDeveloper from '../templates/TemplateDeveloper'
+
+const TEMPLATE_COMP_MAP = {
+  alexa: TemplateAlexa,
+  browncream: TemplateBrownCream,
+  purple: TemplatePurple,
+  futuristic: TemplateFuturistic,
+  dark: TemplateDark,
+  classic: TemplateClassic,
+  minimalist: TemplateMinimalist,
+  soumya: TemplateSoumya,
+  developer: TemplateDeveloper
+}
+
+const PREVIEW_DATA = {
+  details: { name: 'Your Name', title: 'Professional Role', bio: 'This is a preview of your bio text.' },
+  skills: [{ name: 'Skill 1', level: 'Expert' }, { name: 'Skill 2', level: 'Intermediate' }],
+  experience: [{ role: 'Senior Developer', company: 'Tech Inc', from: '2022', to: 'Present' }],
+}
+
 const STEPS = [
   { id: 0, icon: User,          label: 'Details'    },
   { id: 1, icon: Code2,         label: 'Skills'     },
@@ -27,7 +56,6 @@ const TEMPLATES = [
   { id: 'alexa',       name: 'Alexa Modern',     tag: 'Featured',  bg: 'linear-gradient(135deg,#6e57e0,#6e57e0)', accent: '#6e57e0', desc: 'Modern responsive design — icons and clean sections' },
   { id: 'browncream',  name: 'Brown & Cream',   tag: 'New',       bg: 'linear-gradient(135deg,#FAF7F2,#E8D5C0)', accent: '#7B5B3A', desc: 'Warm cream & brown — elegant and timeless' },
   { id: 'purple',      name: 'Purple Beige',    tag: 'Popular',   bg: 'linear-gradient(135deg,#f4ece8,#ede0f0)', accent: '#c4a0d0', desc: 'Soft beige with purple blobs — creative & playful' },
-  { id: 'grayscale',   name: 'B&W Photography', tag: 'New',       bg: 'linear-gradient(135deg,#2d2d2d,#1e1e1e)', accent: '#ffffff', desc: 'Dark charcoal with bold B&W typography' },
   { id: 'futuristic',  name: 'Neural Circuit',  tag: 'Exclusive', bg: 'linear-gradient(135deg,#03040d,#07021a)',  accent: '#00d4ff', desc: 'Cyberpunk neon blue — built for tech visionaries' },
   { id: 'minimalist',  name: 'B&W Minimalist',  tag: 'Premium',   bg: 'linear-gradient(135deg,#252525,#1a1a1a)', accent: '#e8e3d5', desc: 'Dark charcoal with off-white cream — bold & minimal' },
   { id: 'greenbeige',  name: 'Green Beige',     tag: 'New',       bg: 'linear-gradient(135deg,#ddd9ce,#c8c4b4)', accent: '#6b8c4e', desc: 'Olive green & warm beige — editorial presentation style' },
@@ -40,6 +68,8 @@ const TEMPLATES = [
   { id: 'neon',        name: 'Neon Cyber',      tag: 'Gamer',     bg: 'linear-gradient(135deg,#020617,#1e1b4b)', accent: '#d946ef', desc: 'Vibrant magenta neon glow on dark slate' },
   { id: 'light',       name: 'Clean Light',      tag: 'Standard',  bg: 'linear-gradient(135deg,#f8fafc,#f1f5f9)', accent: '#0ea5e9', desc: 'Pure white and light gray — professionally safe' },
   { id: 'dark',        name: 'Simple Dark',      tag: 'Standard',  bg: 'linear-gradient(135deg,#0f172a,#020617)', accent: '#38bdf8', desc: 'Deep dark theme — easy on the eyes' },
+  { id: 'soumya',      name: 'Soumya Creative',  tag: 'Premium',   bg: 'linear-gradient(135deg,#0c0513,#1a0b2e)', accent: '#c770f0', desc: 'Premium dark purple aesthetic with floating animations' },
+  { id: 'developer',   name: 'Developer Folio',  tag: 'Premium',   bg: 'linear-gradient(135deg,#0f172a,#1e1b4b)', accent: '#38bdf8', desc: 'Clean developer-focused layout' },
 ]
 
 const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Expert']
@@ -765,56 +795,58 @@ function StepAwards({ data, onChange }) {
 function StepTemplate({ selected, onChange }) {
   return (
     <div className="space-y-5">
-
       <div className="grid grid-cols-2 gap-4">
-        {TEMPLATES.map(t => (
-          <div key={t.id} onClick={() => onChange(t.id)}
-            className="cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.03]"
-            style={{
-              border: selected === t.id ? `2px solid ${t.accent}` : '2px solid rgba(75,85,99,0.2)',
-              boxShadow: selected === t.id ? `0 0 25px ${t.accent}40` : 'none'
-            }}>
-            {/* Thumbnail */}
-            <div className="h-36 relative" style={{ background: t.bg }}>
-              {/* Mini portfolio mockup inside */}
-              <div className="absolute inset-3 rounded-lg overflow-hidden" style={{ background: 'rgba(0,0,0,0.3)', border:`1px solid ${t.accent}25` }}>
-                <div className="p-2.5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-6 h-6 rounded-full" style={{ background: t.accent }}/>
-                    <div>
-                      <div className="h-1.5 w-14 rounded mb-1" style={{ background:`${t.accent}80` }}/>
-                      <div className="h-1 w-10 rounded" style={{ background:'rgba(255,255,255,0.2)' }}/>
+        {TEMPLATES.map(t => {
+          const Comp = TEMPLATE_COMP_MAP[t.id]
+          return (
+            <div key={t.id} onClick={() => onChange(t.id)}
+              className="cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.03]"
+              style={{
+                border: selected === t.id ? `2px solid ${t.accent}` : '2px solid rgba(75,85,99,0.2)',
+                boxShadow: selected === t.id ? `0 0 25px ${t.accent}40` : 'none'
+              }}>
+              <div className="h-40 relative overflow-hidden bg-[#0d1526]" style={{ background: t.bg }}>
+                {Comp ? (
+                  <div 
+                    className="absolute inset-0 z-0 origin-top-left pointer-events-none transition-all duration-700"
+                    style={{ width: '400%', height: '400%', transformOrigin: '0 0', transform: 'scale(0.25)' }}
+                  >
+                    <Comp p={{ ...PREVIEW_DATA, template: t.id }} />
+                  </div>
+                ) : (
+                  <div className="absolute inset-3 rounded-lg overflow-hidden" style={{ background: 'rgba(0,0,0,0.3)', border:`1px solid ${t.accent}25` }}>
+                    <div className="p-2.5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-6 h-6 rounded-full" style={{ background: t.accent }}/>
+                        <div className="h-1.5 w-14 rounded bg-white/20" />
+                      </div>
                     </div>
                   </div>
-                  <div className="flex gap-1 mb-2">
-                    {['JS','React','CSS'].map(s => (
-                      <span key={s} className="text-[7px] px-1.5 py-0.5 rounded-full" style={{ background:`${t.accent}20`, color:t.accent, border:`1px solid ${t.accent}30` }}>{s}</span>
-                    ))}
+                )}
+                
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-[1]" />
+                
+                {selected === t.id && (
+                  <div className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center z-10"
+                    style={{ background: t.accent }}>
+                    <Check size={12} className="text-white"/>
                   </div>
-                  <div className="space-y-1">
-                    <div className="h-1 rounded" style={{ background:'rgba(255,255,255,0.1)' }}/>
-                    <div className="h-1 w-3/4 rounded" style={{ background:'rgba(255,255,255,0.07)' }}/>
-                  </div>
-                </div>
+                )}
               </div>
-              {/* Selected check */}
-              {selected === t.id && (
-                <div className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center"
-                  style={{ background: t.accent }}>
-                  <Check size={12} className="text-white"/>
+              
+              <div className="p-3" style={{ background:'rgba(13,21,38,0.95)' }}>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-white text-sm font-semibold">{t.name}</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-tighter" 
+                    style={{ background: `${t.accent}15`, color: t.accent, border: `1px solid ${t.accent}30` }}>
+                    {t.tag}
+                  </span>
                 </div>
-              )}
-            </div>
-            {/* Info */}
-            <div className="p-3" style={{ background:'rgba(13,21,38,0.95)' }}>
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-white text-sm font-semibold">{t.name}</span>
-                <span className="text-xs px-2 py-0.5 rounded-full" style={{ background:`${t.accent}15`, color:t.accent, border:`1px solid ${t.accent}25` }}>{t.tag}</span>
+                <p className="text-gray-500 text-[10px] line-clamp-1">{t.desc}</p>
               </div>
-              <p className="text-gray-500 text-xs">{t.desc}</p>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )

@@ -107,18 +107,8 @@ export default function TemplateDarkBlue({ p = {} }) {
   const projCount   = projects.length  || 8
   const expCount    = experience.length || 5
 
-  const edList = education.length ? education : [
-    { degree: 'Junior High School', institution: 'City Junior High School', from: '2015', to: '2018', field: 'General Studies' },
-    { degree: 'High School Diploma', institution: 'Metropolitan High School', from: '2018', to: '2021', field: 'Arts & Design' },
-    { degree: "Bachelor's Degree", institution: 'State University of Design', from: '2021', to: '2025', field: 'Graphic Design' },
-  ]
-
-  const projList = projects.length ? projects : [
-    { name: 'Brand Identity Design', description: 'Comprehensive brand identity system including logo, color palette, and typography guidelines for a modern tech startup.', tech: ['Illustrator', 'Figma', 'Photoshop'] },
-    { name: 'Poster Design Collection', description: 'Series of creative poster designs for cultural events, combining bold typography with striking visual compositions.', tech: ['Photoshop', 'InDesign'] },
-    { name: 'Illustration Portfolio', description: 'Original digital illustrations spanning character design, editorial art, and conceptual storytelling across various media.', tech: ['Procreate', 'Illustrator'] },
-    { name: 'Logo Design Projects', description: 'Collection of minimal and expressive logos crafted for diverse clients across fashion, tech, and hospitality sectors.', tech: ['Illustrator', 'Sketch'] },
-  ]
+  const edList = education
+  const projList = projects
 
   const font = "'Segoe UI','Helvetica Neue',Arial,sans-serif"
 
@@ -192,17 +182,15 @@ export default function TemplateDarkBlue({ p = {} }) {
         </div>
         <div style={{ width: '100%', maxWidth: 760 }}>
           {[
-            { label: 'Background of Education', num: 3 },
-            { label: 'Projects Overview',        num: 4 },
-            { label: 'Project Design Logo',      num: 5 },
-            { label: 'Project Design Poster',    num: 6 },
-            { label: 'Project Illustration Work',num: 7 },
-            { label: 'Project Brand Identity',   num: 8 },
-          ].map((item, i) => (
+            { label: 'Education', show: education.length > 0 },
+            { label: 'Project Portfolio', show: projects.length > 0 },
+            { label: 'Professional Skills', show: skills.length > 0 },
+            { label: 'Work Experience', show: experience.length > 0 },
+          ].filter(x => x.show).map((item, i) => (
             <div key={i}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 0' }}>
                 <span style={{ fontWeight: 700, fontSize: 18 }}>{item.label}</span>
-                <span style={{ fontWeight: 900, fontSize: 22, color: ACC2 }}>{item.num}</span>
+                <span style={{ fontWeight: 900, fontSize: 22, color: ACC2 }}>{i + 3}</span>
               </div>
               <Divider />
             </div>

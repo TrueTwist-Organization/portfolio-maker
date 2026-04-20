@@ -4,7 +4,7 @@ import api from '../api/api'
 import TemplatePurple from '../templates/TemplatePurple'
 import TemplateFuturistic from '../templates/TemplateFuturistic'
 import TemplateMinimalist from '../templates/TemplateMinimalist'
-import TemplateGrayscale from '../templates/TemplateGrayscale'
+
 import TemplateBrownCream from '../templates/TemplateBrownCream'
 import TemplateDarkBlue from '../templates/TemplateDarkBlue'
 import TemplatePresentationStyle from '../templates/TemplatePresentationStyle'
@@ -16,10 +16,12 @@ import TemplateNeon from '../templates/TemplateNeon'
 import TemplateLight from '../templates/TemplateLight'
 import TemplateDark from '../templates/TemplateDark'
 import TemplateClassic from '../templates/TemplateClassic'
+import TemplateAlexa from '../templates/TemplateAlexa'
+import TemplateSoumya from '../templates/TemplateSoumya'
+import TemplateDeveloper from '../templates/TemplateDeveloper'
 
 const TEMPLATE_MAP = {
   browncream: TemplateBrownCream,
-  grayscale: TemplateGrayscale,
   purple: TemplatePurple,
   futuristic: TemplateFuturistic,
   minimalist: TemplateMinimalist,
@@ -33,6 +35,9 @@ const TEMPLATE_MAP = {
   light:       TemplateLight,
   dark:        TemplateDark,
   classic:     TemplateClassic,
+  alexa:       TemplateAlexa,
+  soumya:      TemplateSoumya,
+  developer:   TemplateDeveloper,
 }
 
 export default function PublishedPortfolio() {
