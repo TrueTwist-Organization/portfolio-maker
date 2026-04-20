@@ -24,6 +24,7 @@ const STEPS = [
 ]
 
 const TEMPLATES = [
+  { id: 'alexa',       name: 'Alexa Modern',     tag: 'Featured',  bg: 'linear-gradient(135deg,#6e57e0,#6e57e0)', accent: '#6e57e0', desc: 'Modern responsive design — icons and clean sections' },
   { id: 'browncream',  name: 'Brown & Cream',   tag: 'New',       bg: 'linear-gradient(135deg,#FAF7F2,#E8D5C0)', accent: '#7B5B3A', desc: 'Warm cream & brown — elegant and timeless' },
   { id: 'purple',      name: 'Purple Beige',    tag: 'Popular',   bg: 'linear-gradient(135deg,#f4ece8,#ede0f0)', accent: '#c4a0d0', desc: 'Soft beige with purple blobs — creative & playful' },
   { id: 'grayscale',   name: 'B&W Photography', tag: 'New',       bg: 'linear-gradient(135deg,#2d2d2d,#1e1e1e)', accent: '#ffffff', desc: 'Dark charcoal with bold B&W typography' },

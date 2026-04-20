@@ -46,6 +46,7 @@ import TemplateNeon from '../templates/TemplateNeon'
 import TemplateLight from '../templates/TemplateLight'
 import TemplateDark from '../templates/TemplateDark'
 import TemplateClassic from '../templates/TemplateClassic'
+import TemplateAlexa from '../templates/TemplateAlexa'
 
 const TEMPLATE_MAP = {
   browncream:         { component: TemplateBrownCream,         name: 'Brown & Cream',       accent: '#7B5B3A' },
@@ -63,6 +64,7 @@ const TEMPLATE_MAP = {
   light:                 { component: TemplateLight,                   name: 'Clean Light',                 accent: '#3b82f6' },
   dark:                  { component: TemplateDark,                    name: 'Modern Dark',                 accent: '#6366f1' },
   classic:               { component: TemplateClassic,                 name: 'Classic Professional',        accent: '#2d3748' },
+  alexa:                 { component: TemplateAlexa,                   name: 'Alexa Modern',                accent: '#6e57e0' },
 }
 
 function generatePurpleHTML(portfolio) {
@@ -376,7 +378,6 @@ function generateHTML(portfolio, templateId) {
   if (templateId === 'purple')     return generatePurpleHTML(portfolio)
   if (templateId === 'futuristic') return generateFuturisticHTML(portfolio)
   if (templateId === 'grayscale')  return generateGrayscaleHTML(portfolio)
-
   // fallback generic dark
   const accent = '#22d3ee'
   const bg     = '#060d1a'
