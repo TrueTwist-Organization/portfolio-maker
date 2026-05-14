@@ -290,7 +290,7 @@ function MouseOrbs({ isMobile }) {
 }
 
 /* ── Hero Phone Showcase (right side) ── */
-function HeroPhoneShowcase() {
+function HeroPhoneShowcase({ isMobile }) {
   const [mouse, setMouse] = useState({ x: 0.5, y: 0.5, lx: 0, ly: 0 })
   const [entered, setEntered] = useState(false)
   const [screenGlow, setScreenGlow] = useState(false)
@@ -329,7 +329,15 @@ function HeroPhoneShowcase() {
   ]
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', width: 460, height: 560, flexShrink: 0 }}>
+    <div ref={containerRef} style={{ 
+      position: 'relative', 
+      width: isMobile ? 320 : 460, 
+      height: isMobile ? 420 : 560, 
+      flexShrink: 0,
+      transform: isMobile ? 'scale(0.85)' : 'none',
+      transformOrigin: 'center center',
+      margin: isMobile ? '0 auto' : '0'
+    }}>
 
       {/* Ambient glow */}
       <div style={{
@@ -343,19 +351,19 @@ function HeroPhoneShowcase() {
       {cards.map((card, i) => {
         const enterDelay = `${i * 0.13}s`
         
-        let tx = card.bx
-        let ty = card.by
+        let tx = isMobile ? card.bx * 0.6 : card.bx
+        let ty = isMobile ? card.by * 0.6 : card.by
         let rot = card.rot
-        let scale = 1
+        let scale = isMobile ? 0.8 : 1
         let zIndex = i === 2 ? 8 : (i === 1 || i === 3) ? 6 : 4
 
         // If hovering phone, cards stack nicely on top of the phone screen
         let opacity = entered ? 1 : 0
         if (hoveringPhone) {
           tx = 0
-          ty = (i - 2) * 15 + 20 // Stacked vertically in the screen area
+          ty = (i - 2) * 15 + (isMobile ? 10 : 20) // Stacked vertically in the screen area
           rot = 0
-          scale = 0.45
+          scale = isMobile ? 0.35 : 0.45
           opacity = 1
           zIndex = 40 // High z-index to stay on top of phone (which is 10)
         } 
@@ -363,7 +371,7 @@ function HeroPhoneShowcase() {
         else if (hoveredCardIdx === i) {
           tx += tx > 0 ? 40 : -40
           ty -= 40
-          scale = 1.15
+          scale = isMobile ? 0.9 : 1.15
           rot *= 1.5
           zIndex = 50
         }
@@ -377,7 +385,7 @@ function HeroPhoneShowcase() {
             onMouseEnter={() => setHoveredCardIdx(i)}
             onMouseLeave={() => setHoveredCardIdx(null)}
             style={{
-              position: 'absolute', bottom: 160, left: '50%',
+              position: 'absolute', bottom: isMobile ? 120 : 160, left: '50%',
               transform: entered
                 ? `translateX(calc(-50% + ${tx}px)) translateY(${ty}px) rotate(${rot}deg) scale(${scale})`
                 : `translateX(-50%) translateY(0px) rotate(0deg) scale(0.05)`,
@@ -391,7 +399,7 @@ function HeroPhoneShowcase() {
           >
             <div style={{ transform: `translate(${mx}px,${my}px)`, transition: 'transform 0.5s ease' }}>
               <div style={{
-                width: 128, borderRadius: 12, overflow: 'hidden',
+                width: isMobile ? 100 : 128, borderRadius: 12, overflow: 'hidden',
                 border: `1.5px solid ${card.accent}${hoveredCardIdx === i ? '' : '44'}`,
                 boxShadow: hoveredCardIdx === i 
                   ? `0 25px 60px rgba(0,0,0,0.8), 0 0 30px ${card.accent}44`
@@ -399,7 +407,7 @@ function HeroPhoneShowcase() {
                 animation: `sway${i} ${card.swayDur} ease-in-out ${card.swayDelay} infinite`,
                 transition: 'border 0.3s, box-shadow 0.3s'
               }}>
-                <div style={{ height:80, position:'relative', overflow:'hidden', background:card.bg }}>
+                <div style={{ height: isMobile ? 60 : 80, position:'relative', overflow:'hidden', background:card.bg }}>
                   <div style={{ position:'absolute', inset:0, background:card.glow }} />
                   <div style={{ padding:'7px 9px' }}>
                     <div style={{ display:'flex', alignItems:'center', gap:4, marginBottom:5 }}>
@@ -422,7 +430,7 @@ function HeroPhoneShowcase() {
                   borderTop:`1px solid ${card.accent}20`,
                   display:'flex', alignItems:'center', justifyContent:'space-between',
                 }}>
-                  <span style={{ color:'rgba(255,255,255,0.92)', fontSize:9, fontWeight:700, letterSpacing:'0.02em' }}>{card.name}</span>
+                  <span style={{ color:'rgba(255,255,255,0.92)', fontSize: isMobile ? 8 : 9, fontWeight:700, letterSpacing:'0.02em' }}>{card.name}</span>
                   <div style={{ width:7, height:7, borderRadius:'50%', background:card.accent, boxShadow:`0 0 5px ${card.accent}` }} />
                 </div>
               </div>
@@ -439,8 +447,8 @@ function HeroPhoneShowcase() {
         { bx: 60,   by: -230, color: '#8b5cf6', s: 3, delay: '0.4s', enterDelay: '1.15s' },
       ].map((d, i) => (
         <div key={i} style={{
-          position: 'absolute', bottom: 160, left: '50%',
-          transform: `translate(calc(-50% + ${entered ? d.bx + (mouse.x - 0.5) * 14 : 0}px), ${entered ? d.by + (mouse.y - 0.5) * 10 : 0}px)`,
+          position: 'absolute', bottom: isMobile ? 120 : 160, left: '50%',
+          transform: `translate(calc(-50% + ${entered ? (isMobile ? d.bx * 0.6 : d.bx) + (mouse.x - 0.5) * 14 : 0}px), ${entered ? (isMobile ? d.by * 0.6 : d.by) + (mouse.y - 0.5) * 10 : 0}px)`,
           opacity: entered ? 0.8 : 0,
           transition: `transform 0.5s ease ${d.enterDelay}, opacity 0.4s ease ${d.enterDelay}`,
           width: d.s, height: d.s, borderRadius: '50%',
@@ -618,7 +626,7 @@ export default function HomePage() {
         <MobileTopBar setMobileOpen={setMobileOpen} />
 
         {/* ══════════════ HERO SECTION ══════════════ */}
-        <section className="relative min-h-[75vh] flex flex-col lg:flex-row items-center justify-center lg:justify-start px-4 sm:px-12 lg:px-20 py-10 sm:py-16 lg:py-14 overflow-hidden gap-10 lg:gap-20">
+        <section className="relative min-h-[75vh] flex flex-col lg:flex-row items-center justify-center px-4 sm:px-12 lg:px-20 py-10 sm:py-16 lg:py-14 overflow-hidden gap-10 lg:gap-20 max-w-7xl mx-auto">
           <div style={{ position:'absolute', inset:0, pointerEvents:'none', overflow:'hidden' }}>
             <div style={{ position:'absolute', right:'35%', top:'35%', width:280, height:280, background:'radial-gradient(circle, rgba(99,102,241,0.07), transparent)', filter:'blur(80px)' }} />
             <div style={{ position:'absolute', left:'260px', top:'40%', width:200, height:200, background:'radial-gradient(circle, rgba(34,211,238,0.05), transparent)', filter:'blur(60px)' }} />
@@ -626,7 +634,7 @@ export default function HomePage() {
 
           <MouseOrbs isMobile={isMobile} />
 
-          <div style={{ flex:1, position:'relative', zIndex:10, maxWidth:520 }} className="text-center lg:text-left">
+          <div style={{ flex:1, position:'relative', zIndex:10, maxWidth:600 }} className="text-center">
             <div style={{
               display:'inline-flex', alignItems:'center', gap:8,
               padding:'6px 16px', borderRadius:9999, marginBottom:20,
@@ -656,7 +664,7 @@ export default function HomePage() {
               that gets you hired faster.
             </p>
 
-            <div className="flex items-center justify-center lg:justify-start gap-4 mb-9">
+            <div className="flex items-center justify-center gap-4 mb-9">
               <button
                 onClick={() => navigate('/dashboard')}
                 className="btn-primary w-full sm:w-auto"
@@ -667,9 +675,9 @@ export default function HomePage() {
               </button>
             </div>
 
-            <div className="flex flex-wrap justify-center lg:justify-start gap-x-8 gap-y-4 mt-8">
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 mt-8">
               {[['50K+','Portfolios'], ['4.9★','Rating'], ['2 min','Setup']].map(([v, l]) => (
-                <div key={l} className="text-center lg:text-left">
+                <div key={l} className="text-center">
                   <div className="text-white font-black text-2xl sm:text-3xl tracking-tight">{v}</div>
                   <div className="text-gray-500 text-[10px] uppercase font-bold tracking-widest mt-1">{l}</div>
                 </div>
@@ -677,8 +685,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="hidden lg:block">
-            <HeroPhoneShowcase />
+          <div className="relative z-10">
+            <HeroPhoneShowcase isMobile={isMobile} />
           </div>
         </section>
 
@@ -942,8 +950,31 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="mt-16 pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-gray-600 text-xs">© 2026 PortfolioMaker. Built with precision and AI magic.</p>
+          <div className="mt-16 pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+              <p className="text-gray-600 text-xs">© 2026 PortfolioMaker. Built with precision and AI magic.</p>
+              <div className="h-3 w-px bg-white/10 hidden sm:block" />
+              <div className="flex items-center gap-4 sm:gap-6">
+                <a 
+                  href="https://truetwist.in" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-600 hover:text-cyan-400 transition-all duration-300 text-xs flex items-center gap-1.5 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-800 group-hover:bg-cyan-500 transition-colors" />
+                  Design by TrueTwist
+                </a>
+                <a 
+                  href="https://369network.com/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gray-600 hover:text-cyan-400 transition-all duration-300 text-xs flex items-center gap-1.5 group"
+                >
+                  <span className="w-1 h-1 rounded-full bg-gray-800 group-hover:bg-cyan-500 transition-colors" />
+                  Marketing by 369 Network
+                </a>
+              </div>
+            </div>
             <div className="flex items-center gap-2 text-gray-700 text-xs">
               <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
               All Systems Operational
