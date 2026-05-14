@@ -626,7 +626,10 @@ export default function HomePage() {
         <MobileTopBar setMobileOpen={setMobileOpen} />
 
         {/* ══════════════ HERO SECTION ══════════════ */}
-        <section className="relative min-h-[75vh] flex flex-col lg:flex-row items-center justify-center px-4 sm:px-12 lg:px-20 py-10 sm:py-16 lg:py-14 overflow-hidden gap-10 lg:gap-20 max-w-7xl mx-auto">
+        <section 
+          className="relative min-h-[75vh] flex flex-col lg:flex-row items-center justify-center px-4 sm:px-12 lg:px-20 py-10 sm:py-16 lg:py-14 overflow-hidden gap-10 lg:gap-20"
+          style={{ maxWidth: '1280px', margin: '0 auto', width: '100%' }}
+        >
           <div style={{ position:'absolute', inset:0, pointerEvents:'none', overflow:'hidden' }}>
             <div style={{ position:'absolute', right:'35%', top:'35%', width:280, height:280, background:'radial-gradient(circle, rgba(99,102,241,0.07), transparent)', filter:'blur(80px)' }} />
             <div style={{ position:'absolute', left:'260px', top:'40%', width:200, height:200, background:'radial-gradient(circle, rgba(34,211,238,0.05), transparent)', filter:'blur(60px)' }} />
@@ -634,7 +637,7 @@ export default function HomePage() {
 
           <MouseOrbs isMobile={isMobile} />
 
-          <div style={{ flex:1, position:'relative', zIndex:10, maxWidth:600 }} className="text-center">
+          <div style={{ flex:1, position:'relative', zIndex:10, maxWidth:600, textAlign: 'center', margin: '0 auto' }}>
             <div style={{
               display:'inline-flex', alignItems:'center', gap:8,
               padding:'6px 16px', borderRadius:9999, marginBottom:20,

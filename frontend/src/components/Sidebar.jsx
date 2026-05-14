@@ -25,7 +25,9 @@ export default function Sidebar({ mobileOpen, setMobileOpen }) {
       }`}
       style={{
         background: 'linear-gradient(180deg, #0d1526 0%, #060e20 50%, #040b18 100%)',
-        borderRight: '1px solid rgba(34, 211, 238, 0.1)'
+        borderRight: '1px solid rgba(34, 211, 238, 0.1)',
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
       <style>{`
@@ -89,7 +91,10 @@ export default function Sidebar({ mobileOpen, setMobileOpen }) {
       )}
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <nav 
+        className="flex-1 px-3 py-4 space-y-1 overflow-y-auto"
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
         {menuItems.map((item) => {
           const Icon = item.icon
           const isActive = location.pathname === item.path
