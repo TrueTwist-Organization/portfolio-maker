@@ -56,11 +56,11 @@ app.get('/api/health', async (req, res) => {
       supabase: !error,
       uptime: process.uptime(),
     };
-    if (error && process.env.NODE_ENV !== 'production') {
+    if (error) {
       payload.errorMessage = error.message;
-      payload.errorCode = error.code;
+      payload.errorCode = error.code || '';
       payload.hint =
-        'If the key starts with sb_secret_ and queries fail, open Supabase → Settings → API → scroll to Legacy API keys → copy service_role (long eyJ... JWT) into SUPABASE_SERVICE_ROLE_KEY in backend/.env, then restart.';
+        'Render: set SUPABASE_URL (https://YOUR-REF.supabase.co, no /rest/v1/) and SUPABASE_SERVICE_ROLE_KEY (legacy service_role JWT eyJ...). Redeploy after saving env.';
     }
     res.json(payload);
   } catch (e) {
