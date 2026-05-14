@@ -1,9 +1,11 @@
 import axios from 'axios';
 
+const apiBase = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+
 const api = axios.create({
-  // In development, the proxy in vite.config.js handles /api
-  // In production, we use the VITE_API_URL environment variable
-  baseURL: import.meta.env.VITE_API_URL || '',
+  // In development, the proxy in vite.config.js handles /api when VITE_API_URL is empty
+  // In production, set VITE_API_URL to your deployed API origin (no trailing slash)
+  baseURL: apiBase,
   withCredentials: true
 });
 

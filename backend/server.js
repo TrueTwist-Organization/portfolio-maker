@@ -1,65 +1,44 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const mongoose = require('mongoose');
 const path = require('path');
-const mockStorage = require('./mockStorage'); // Add this line
+const { buildAllowedOrigins } = require('./config/origins');
+const { assertSupabaseEnv, getSupabase } = require('./lib/supabase');
 
 dotenv.config();
 
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction && !process.env.JWT_SECRET) {
+  console.error('FATAL: JWT_SECRET must be set when NODE_ENV=production');
+  process.exit(1);
+}
+
+assertSupabaseEnv();
+
 const app = express();
 
-// Middleware
-const allowedOrigins = [
-  'http://localhost:5173', 
-  'http://localhost:5174', 
-  'http://localhost:5175',
-  process.env.FRONTEND_URL // <-- Add your Vercel URL here
-].filter(Boolean);
+if (isProduction) {
+  app.set('trust proxy', 1);
+}
 
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
+const allowedOrigins = buildAllowedOrigins();
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin) return callback(null, true);
+      if (!isProduction) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      console.warn(`[CORS] Blocked origin: ${origin}. Set FRONTEND_URL, FRONTEND_URLS, or ALLOWED_ORIGINS on the API.`);
+      return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// MongoDB Connection
-let isDemoMode = false;
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB Connected'))
-  .catch(err => {
-    console.log('❌ MongoDB Error:', err.message);
-    console.log('🚀 Entering DEMO MODE (In-Memory Storage Enabled)');
-    isDemoMode = true;
-    
-    // Patch models to use mock storage if DB fails
-    const User = require('./models/User');
-    const Portfolio = require('./models/Portfolio');
-    
-    // Simplified patching for demo
-    if (isDemoMode) {
-      User.findOne = mockStorage.users.findOne;
-      User.find = mockStorage.users.find;
-      User.create = mockStorage.users.create;
-      User.findById = mockStorage.users.findById;
-      
-      Portfolio.find = mockStorage.portfolios.find;
-      Portfolio.findOne = mockStorage.portfolios.findOne;
-      Portfolio.create = mockStorage.portfolios.create;
-      Portfolio.findOneAndUpdate = mockStorage.portfolios.findOneAndUpdate;
-      Portfolio.findOneAndDelete = mockStorage.portfolios.findOneAndDelete;
-    }
-  });
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -67,7 +46,28 @@ app.use('/api/upload', require('./routes/upload'));
 app.use('/api/portfolios', require('./routes/portfolios'));
 app.use('/api/ai', require('./routes/ai'));
 
-// Health check
+app.get('/api/health', async (req, res) => {
+  try {
+    const supabase = getSupabase();
+    const { error } = await supabase.from('users').select('id').limit(1);
+    const payload = {
+      ok: true,
+      database: error ? 'error' : 'connected',
+      supabase: !error,
+      uptime: process.uptime(),
+    };
+    if (error && process.env.NODE_ENV !== 'production') {
+      payload.errorMessage = error.message;
+      payload.errorCode = error.code;
+      payload.hint =
+        'If the key starts with sb_secret_ and queries fail, open Supabase → Settings → API → scroll to Legacy API keys → copy service_role (long eyJ... JWT) into SUPABASE_SERVICE_ROLE_KEY in backend/.env, then restart.';
+    }
+    res.json(payload);
+  } catch (e) {
+    res.status(503).json({ ok: false, database: 'error', message: e.message });
+  }
+});
+
 app.get('/', (req, res) => {
   res.json({ message: 'PortfolioMaker API is running 🚀' });
 });
@@ -76,6 +76,10 @@ const PORT = process.env.PORT || 5000;
 if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log('✅ Supabase configured');
+    if (isProduction && allowedOrigins.length === 0) {
+      console.warn('[CORS] No FRONTEND_URL / FRONTEND_URLS / ALLOWED_ORIGINS set — browser requests from your live site will be blocked.');
+    }
   });
 }
 

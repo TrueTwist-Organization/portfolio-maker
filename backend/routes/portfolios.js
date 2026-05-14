@@ -1,17 +1,21 @@
 const express = require('express');
-const Portfolio = require('../models/Portfolio');
+const {
+  listPortfolios,
+  getPortfolioForOwner,
+  createPortfolio,
+  updatePortfolio,
+  deletePortfolio,
+  getPublicLiveBySlug,
+  publishPortfolio,
+  unpublishPortfolio,
+} = require('../services/portfolios');
 const { protect } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Publicly fetch a LIVE portfolio by slug
 router.get('/public/:slug', async (req, res) => {
   try {
-    const portfolio = await Portfolio.findOneAndUpdate(
-      { slug: req.params.slug, isLive: true },
-      { $inc: { views: 1 } },
-      { new: true }
-    );
+    const portfolio = await getPublicLiveBySlug(req.params.slug);
     if (!portfolio) {
       return res.status(404).json({ message: 'Live portfolio not found' });
     }
@@ -21,45 +25,27 @@ router.get('/public/:slug', async (req, res) => {
   }
 });
 
-// GET /api/portfolios — get all portfolios for logged in user or guest
 router.get('/', protect, async (req, res) => {
   try {
-    const isGuest = String(req.user._id).startsWith('guest_');
-    const query = isGuest ? { guestId: req.user._id } : { user: req.user._id };
-    const portfolios = await Portfolio.find(query).sort({ createdAt: -1 });
+    const portfolios = await listPortfolios(req.user);
     res.json(portfolios);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// POST /api/portfolios — create new portfolio
 router.post('/', protect, async (req, res) => {
   try {
-    const { title, template, resumeFile, data } = req.body;
-    const isGuest = String(req.user._id).startsWith('guest_');
-
-    const portfolio = await Portfolio.create({
-      ...(isGuest ? { guestId: req.user._id } : { user: req.user._id }),
-      title: title || 'My Portfolio',
-      template: template || 'modern',
-      resumeFile,
-      data,
-      status: 'draft'
-    });
-
+    const portfolio = await createPortfolio(req.user, req.body);
     res.status(201).json(portfolio);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// GET /api/portfolios/:id
 router.get('/:id', protect, async (req, res) => {
   try {
-    const isGuest = String(req.user._id).startsWith('guest_');
-    const query = { _id: req.params.id, ...(isGuest ? { guestId: req.user._id } : { user: req.user._id }) };
-    const portfolio = await Portfolio.findOne(query);
+    const portfolio = await getPortfolioForOwner(req.params.id, req.user);
     if (!portfolio) {
       return res.status(404).json({ message: 'Portfolio not found' });
     }
@@ -69,16 +55,9 @@ router.get('/:id', protect, async (req, res) => {
   }
 });
 
-// PUT /api/portfolios/:id
 router.put('/:id', protect, async (req, res) => {
   try {
-    const isGuest = String(req.user._id).startsWith('guest_');
-    const query = { _id: req.params.id, ...(isGuest ? { guestId: req.user._id } : { user: req.user._id }) };
-    const portfolio = await Portfolio.findOneAndUpdate(
-      query,
-      req.body,
-      { new: true }
-    );
+    const portfolio = await updatePortfolio(req.params.id, req.user, req.body);
     if (!portfolio) {
       return res.status(404).json({ message: 'Portfolio not found' });
     }
@@ -88,12 +67,9 @@ router.put('/:id', protect, async (req, res) => {
   }
 });
 
-// DELETE /api/portfolios/:id
 router.delete('/:id', protect, async (req, res) => {
   try {
-    const isGuest = String(req.user._id).startsWith('guest_');
-    const query = { _id: req.params.id, ...(isGuest ? { guestId: req.user._id } : { user: req.user._id }) };
-    const portfolio = await Portfolio.findOneAndDelete(query);
+    const portfolio = await deletePortfolio(req.params.id, req.user);
     if (!portfolio) {
       return res.status(404).json({ message: 'Portfolio not found' });
     }
@@ -103,43 +79,25 @@ router.delete('/:id', protect, async (req, res) => {
   }
 });
 
-// POST /api/portfolios/:id/publish — Mark as live
 router.post('/:id/publish', protect, async (req, res) => {
   try {
     const { slug } = req.body;
     if (!slug) return res.status(400).json({ message: 'Slug is required for publishing' });
 
-    const isGuest = String(req.user._id).startsWith('guest_');
-    const query = { _id: req.params.id, ...(isGuest ? { guestId: req.user._id } : { user: req.user._id }) };
-
-    const existing = await Portfolio.findOne({ slug, _id: { $ne: req.params.id } });
-    if (existing) return res.status(400).json({ message: 'This custom URL is already taken' });
-
-    const portfolio = await Portfolio.findOneAndUpdate(
-      query,
-      { isLive: true, slug, status: 'published' },
-      { new: true }
-    );
-
+    const portfolio = await publishPortfolio(req.params.id, req.user, slug);
     if (!portfolio) return res.status(404).json({ message: 'Portfolio not found' });
     res.json({ message: 'Successfully published!', portfolio });
   } catch (error) {
+    if (error.code === 'SLUG_TAKEN') {
+      return res.status(400).json({ message: 'This custom URL is already taken' });
+    }
     res.status(500).json({ message: error.message });
   }
 });
 
-// POST /api/portfolios/:id/unpublish — Mark as draft
 router.post('/:id/unpublish', protect, async (req, res) => {
   try {
-    const isGuest = String(req.user._id).startsWith('guest_');
-    const query = { _id: req.params.id, ...(isGuest ? { guestId: req.user._id } : { user: req.user._id }) };
-
-    const portfolio = await Portfolio.findOneAndUpdate(
-      query,
-      { isLive: false, status: 'draft' },
-      { new: true }
-    );
-
+    const portfolio = await unpublishPortfolio(req.params.id, req.user);
     if (!portfolio) return res.status(404).json({ message: 'Portfolio not found' });
     res.json({ message: 'Successfully unpublished!', portfolio });
   } catch (error) {

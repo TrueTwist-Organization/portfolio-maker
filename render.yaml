@@ -1,19 +1,13 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Set secrets (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, JWT_SECRET, API keys) in the Render dashboard, not in this file.
 services:
   - type: web
-    name: portfolio-backend
+    name: portfolio-maker-api
     runtime: node
-    plan: free
-    buildCommand: npm install
-    startCommand: node server.js
     rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
     envVars:
-      - key: PORT
-        value: 5000
-      - key: MONGO_URI
-        fromValue: ${MONGO_URI}
-      - key: JWT_SECRET
-        generateValue: true
-      - key: OPENAI_API_KEY
-        fromValue: ${OPENAI_API_KEY}
       - key: NODE_ENV
         value: production
