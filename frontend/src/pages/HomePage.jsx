@@ -718,16 +718,26 @@ export default function HomePage() {
 
           <div className="relative z-10 text-center mb-12 sm:mb-16 px-2">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-4 shadow-[0_0_20px_rgba(34,211,238,0.15)]"
-              style={{ background: 'rgba(34,211,238,0.08)', border: '1px solid rgba(34,211,238,0.2)' }}>
+              style={{ background: 'rgba(34,211,238,0.08)', border: '1px solid rgba(34,211,238,0.2)', display: 'inline-flex' }}>
               <Zap size={13} className="text-cyan-400" />
               <span className="text-cyan-400 text-xs font-semibold uppercase tracking-wider">Powerful Features</span>
             </div>
-            <h2 className="text-white text-3xl sm:text-5xl font-black mb-4 italic tracking-tight drop-shadow-xl">
+            <h2 className="text-white text-3xl sm:text-5xl font-black mb-4 italic tracking-tight drop-shadow-xl" style={{ textAlign: 'center' }}>
               Elevate Your <span className="text-cyan-400" style={{ textShadow: '0 0 30px rgba(34,211,238,0.4)' }}>Career</span>
             </h2>
-            <p className="text-gray-400 max-w-lg mx-auto text-lg">Elite tools designed for professionals who demand the absolute best.</p>
+            <p className="text-gray-400 max-w-lg mx-auto text-lg" style={{ margin: '0 auto', textAlign: 'center' }}>Elite tools designed for professionals who demand the absolute best.</p>
           </div>
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-2 lg:px-8">
+          <div 
+            style={{ 
+              display: 'grid', 
+              gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(300px, 1fr))', 
+              gap: '24px', 
+              maxWidth: '1200px', 
+              margin: '0 auto', 
+              position: 'relative', 
+              zIndex: 10 
+            }}
+          >
             {features.map((f, i) => <FeatureCard key={i} {...f} />)}
           </div>
         </section>
@@ -957,23 +967,23 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
               <p className="text-gray-600 text-xs">© 2026 PortfolioMaker. Built with precision and AI magic.</p>
               <div className="h-3 w-px bg-white/10 hidden sm:block" />
-              <div className="flex items-center gap-4 sm:gap-6">
+              <div className="flex items-center gap-4 sm:gap-6" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                 <a 
                   href="https://truetwist.in" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-gray-600 hover:text-cyan-400 transition-all duration-300 text-xs flex items-center gap-1.5 group"
+                  style={{ color: '#22d3ee', textDecoration: 'none', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-800 group-hover:bg-cyan-500 transition-colors" />
+                  <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#22d3ee' }} />
                   Design by TrueTwist
                 </a>
                 <a 
                   href="https://369network.com/" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-gray-600 hover:text-cyan-400 transition-all duration-300 text-xs flex items-center gap-1.5 group"
+                  style={{ color: '#22d3ee', textDecoration: 'none', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}
                 >
-                  <span className="w-1 h-1 rounded-full bg-gray-800 group-hover:bg-cyan-500 transition-colors" />
+                  <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#22d3ee' }} />
                   Marketing by 369 Network
                 </a>
               </div>
