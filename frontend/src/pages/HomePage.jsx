@@ -993,32 +993,6 @@ export default function HomePage() {
               All Systems Operational
             </div>
           </div>
-
-          <div className="mt-8 pt-6 border-t border-white/[0.04]">
-            <p className="text-center text-[11px] sm:text-xs text-gray-500 leading-relaxed max-w-2xl mx-auto">
-              <span className="text-gray-600">Design by</span>{' '}
-              <a
-                href="https://truetwist.in/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 font-semibold tracking-tight transition-colors hover:text-cyan-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400/60 rounded-sm"
-              >
-                truetwist
-              </a>
-              <span className="inline-block mx-2 sm:mx-3 text-gray-600 select-none" aria-hidden="true">
-                ·
-              </span>
-              <span className="text-gray-600">Marketing by</span>{' '}
-              <a
-                href="https://369network.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 font-semibold tracking-tight transition-colors hover:text-cyan-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-400/60 rounded-sm"
-              >
-                369 Network
-              </a>
-            </p>
-          </div>
         </footer>
 
       </div>
